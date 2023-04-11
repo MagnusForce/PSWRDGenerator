@@ -13,7 +13,7 @@ import os
 import win32api
 import win32con
 import string
-import test.delete.this
+
 
 # Creating SQLite3 database file
 conn = sqlite3.connect('user_credentials.db')
