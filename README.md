@@ -22,3 +22,4 @@ pyinstaller --name=PasswordManager --noconsole --onefile --icon=locked.ico Login
 
 3. After file conversion is done you'll be able to find PasswordManager.exe file in folder /dist.
 
+<img src="login.png">
