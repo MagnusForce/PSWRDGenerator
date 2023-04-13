@@ -14,8 +14,7 @@ import win32api
 import win32con
 import string
 
-
-# Creating SQLite3 database file
+# Creating SQLite3 database file for login information
 conn = sqlite3.connect('user_credentials.db')
 
 conn.execute('''CREATE TABLE IF NOT EXISTS user_credentials
@@ -24,7 +23,6 @@ conn.execute('''CREATE TABLE IF NOT EXISTS user_credentials
              password TEXT NOT NULL,
              email TEXT NOT NULL,
              fernet_key TEXT NOT NULL);''')
-
 
 # Hiding database file
 cwd = os.getcwd()
@@ -153,6 +151,7 @@ def login_user():
         filepath = os.path.join(cwd, 'passwords.db')
         win32api.SetFileAttributes(filepath, win32con.FILE_ATTRIBUTE_HIDDEN)
 
+        # New random password generator
         def new_rand():
             pw_entry.delete(0, END)
             pw_length = my_entry.get()
@@ -181,11 +180,13 @@ def login_user():
                 last_passwords.pop(0)
             show_last_passwords()
 
+        # Function to copy generated password to clipboard
         def clipper():
             root_inside.clipboard_clear()
             root_inside.clipboard_append(pw_entry.get())
             success_label.config(text="Generated password has been copied to clipboard!")
 
+        # Shows last 3 generated password
         def show_last_passwords():
             for child in last_passwords_frame.winfo_children():
                 child.destroy()
@@ -197,6 +198,7 @@ def login_user():
                                     lambda e, password=password: (
                                         pw_entry.delete(0, END), pw_entry.insert(0, password)))
 
+        # Function adds password/site entry to database
         def add_password():
 
             site = site_entry.get()
@@ -221,6 +223,7 @@ def login_user():
             password_entry_inside.delete(0, END)
             load_passwords(id)
 
+        # Function load password/site entries from database to listbox
         def load_passwords(id):
             password_listbox.delete(0, 'end')
 
@@ -232,7 +235,8 @@ def login_user():
                 password_d = password_d.decode()
                 password_listbox.insert(END, f"{site}: {password_d}")
 
-        def modify_password(event):
+        # Function selects password/site entry from listbox to later be modified
+        def select_password(event):
             global selected_site
 
             selection = password_listbox.curselection()
@@ -245,7 +249,8 @@ def login_user():
                 password_entry_inside.insert(END, password)
                 selected_site = site
 
-        def save_modified_password():
+        # Function modifies password/site entry and writes it to database
+        def modify_password():
             global selected_site
 
             new_site = site_entry.get()
@@ -268,12 +273,15 @@ def login_user():
             password_entry_inside.delete(0, END)
             load_passwords(id)
 
+        # Functions that copies generated password to password manager's password field
+
         def copy_to():
             pw_value = pw_entry.get()
             password_entry_inside.delete(0, END)
             password_entry_inside.insert(0, pw_value)
             success_label.config(text="Password has been copied to password manager!")
 
+        # Functions that copies password from password manager's password field to clipboard
         def copy_from():
             root_inside.clipboard_clear()
             root_inside.clipboard_append(password_entry_inside.get())
@@ -281,6 +289,7 @@ def login_user():
 
         entry_var = StringVar()
 
+        # Password strength assessment function
         def password_strength(*args):
             gen_psw = pw_entry.get()
 
@@ -476,23 +485,26 @@ def login_user():
         password_entry_inside = Entry(new)
         password_entry_inside.grid(row=1, column=1)
 
-        save_button = Button(new, text="Save", command=add_password, padx=10, bg="black", fg="white")
+        save_button = Button(new, text="Save", command=add_password, padx=10, bg="black", fg="white",
+                             activebackground="yellow", activeforeground="black")
         save_button.grid(row=2, column=0)
 
         password_listbox = Listbox(new, height=10, font=("Helvetica", 10), cursor="circle", bg="black", fg="white",
                                    justify="center")
         password_listbox.grid(row=3, column=0, columnspan=5, ipadx=65, padx=10, pady=10)
 
-        modify_save_button = Button(new, text="Save Modified", command=save_modified_password, padx=20, bg="black",
-                                    fg="white")
+        modify_save_button = Button(new, text="Save Modified", command=modify_password, padx=20, bg="black",
+                                    fg="white", activebackground="yellow", activeforeground="black")
         modify_save_button.grid(row=2, column=1)
 
-        delete_button = Button(new, text="Delete", command=delete_password, padx=15, bg="black", fg="white")
+        delete_button = Button(new, text="Delete", command=delete_password, padx=15, bg="black", fg="white",
+                               activebackground="yellow", activeforeground="black")
         delete_button.grid(row=2, column=3)
 
-        password_listbox.bind('<Button-1>', modify_password)
+        password_listbox.bind('<Button-1>', select_password)
 
-        copy_from_button = Button(new, text="Copy from", padx=3, bg="black", fg="white", command=copy_from)
+        copy_from_button = Button(new, text="Copy from", padx=3, bg="black", fg="white", command=copy_from,
+                                  activebackground="yellow", activeforeground="black")
         copy_from_button.grid(row=1, column=3)
 
         succ = LabelFrame(bg="black")
@@ -534,13 +546,16 @@ def login_user():
         my_frame = Frame(root_inside, bg="black")
         my_frame.pack(pady=5)
 
-        my_button = Button(my_frame, text="Generate strong password", command=new_rand, bg="black", fg="white")
+        my_button = Button(my_frame, text="Generate strong password", command=new_rand, bg="black", fg="white",
+                           activebackground="yellow", activeforeground="black")
         my_button.grid(row=0, column=0, padx=10, ipadx=76)
 
-        clip_button = Button(my_frame, text="Copy to clipboard", command=clipper, bg="black", fg="white")
+        clip_button = Button(my_frame, text="Copy to clipboard", command=clipper, bg="black", fg="white",
+                             activebackground="yellow", activeforeground="black")
         clip_button.grid(row=1, column=0, padx=10, ipadx=97)
 
-        copy_to_button = Button(my_frame, text="Copy to password field", bg="black", fg="white", command=copy_to)
+        copy_to_button = Button(my_frame, text="Copy to password field", bg="black", fg="white", command=copy_to,
+                                activebackground="yellow", activeforeground="black")
         copy_to_button.grid(row=2, column=0, padx=10, ipadx=84)
 
         last_frame = LabelFrame(root_inside, text="Last 3 passwords:", bg="black", fg="white")
@@ -560,7 +575,6 @@ def login_user():
 
 
 # Password reminder function. Pushing remind_button reminds users password sending it to usesr's email  pushing remind_button
-
 def reset_password():
     email = email_entry.get()
 
@@ -577,8 +591,8 @@ def reset_password():
         cursor.execute("UPDATE user_credentials SET password=? WHERE email=?", (hashed_temp_password, email))
         conn.commit()
 
-        sender_email = ""
-        sender_password = ""
+        sender_email = "marijusknabikas@gmail.com"
+        sender_password = "cawpqkieaahxuhmv"
         recipient_email = email
 
         subject = "Temporary Password for Login/Register App"
@@ -605,10 +619,8 @@ def reset_password():
     password_entry.delete(0, END)
     email_entry.delete(0, END)
 
-
+# Opens up new tkinter window where password change is possible
 def change_password():
-    # ---------------------------------------------
-
     root_main = Tk()
     root_main.title("Password Reset")
     root_main.config(bg="black")
@@ -627,7 +639,8 @@ def change_password():
     root.title("Change password")
     root.config(bg="black")
 
-    def change_password():
+    # Password change function. Changes password to selected one if username, old password and email matches entry in a database
+    def change_pswrd():
         username = username_entry.get()
         password = password_entry.get()
         email = email_entry.get()
@@ -641,21 +654,15 @@ def change_password():
         if result:
             hashed_new_password = hashlib.sha256((new_password + username).encode()).hexdigest()
 
-            conn.execute("UPDATE user_credentials SET password=? WHERE username=? AND password=? AND email=?",
-                         (hashed_new_password, username, password, email))
+            cursor.execute("UPDATE user_credentials SET password=? WHERE username=? AND email=?",
+                           (hashed_new_password, username, email))
             conn.commit()
 
             success_label.config(text="Password changed\nsuccessfully!")
-            root_main.after(5000, clear_success_message)
-            root_main.destroy()
+            root_main.after(3000, root_main.destroy)
         else:
             error_label.config(text="Invalid login\ncredentials!\nAll fields are required!")
-            root_main.after(5000, clear_error_message)
-
-        username_entry.delete(0, END)
-        password_entry.delete(0, END)
-        email_entry.delete(0, END)
-        new_password_entry.delete(0, END)
+            root_main.after(3000, clear_error_message)
 
     username_label = Label(root_main, text="Username")
     username_label.config(font=("Courier", 14), bg="black", fg="white")
@@ -684,7 +691,7 @@ def change_password():
     padding_label = Label(root_main, bg="black")
     padding_label.pack()
 
-    change_button = Button(root_main, font=("Courier", 10), text="Change password", command=change_password, width=18,
+    change_button = Button(root_main, font=("Courier", 10), text="Change password", command=change_pswrd, width=18,
                            bg="black", fg="white", activebackground="yellow", activeforeground="black")
     change_button.pack()
 
@@ -694,6 +701,7 @@ def change_password():
     error_label.pack()
 
     root_main.mainloop()
+
 
 # Username label and entry
 username_label = Label(root, text="Username")
