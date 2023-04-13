@@ -591,8 +591,8 @@ def reset_password():
         cursor.execute("UPDATE user_credentials SET password=? WHERE email=?", (hashed_temp_password, email))
         conn.commit()
 
-        sender_email = "marijusknabikas@gmail.com"
-        sender_password = "cawpqkieaahxuhmv"
+        sender_email = ""
+        sender_password = ""
         recipient_email = email
 
         subject = "Temporary Password for Login/Register App"
