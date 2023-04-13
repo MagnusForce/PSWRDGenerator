@@ -1,25 +1,28 @@
-# Secure Password Manager/Generator
+Secure Password Manager/Generator
 
-Secure password manager for your passwords with our all-in-one platform that includes password generation, strength checking, and even login functionality.
+A secure password manager that includes password generation, strength checking, and even login functionality all in one platform.
 
-#Installation
+# Installation
 
-This program could be used as it is (just runing Python script). But making .exe file makes this program way more userfriendly.
+This program can be used as is by simply running the Python script. However, creating an .exe file makes the program more user-friendly.
 
-Steps for making launchable .exe file:
+Steps for making a launchable .exe file:
 
-1.Most modules used in this project are pre-installed with Python. Only modules you need to instal are: cryptography, pywin32 and pyinstaller. To do install these modules you should run these lines in CMD:
+1.Most modules used in this project are pre-installed with Python. The only modules you need to install are cryptography, pywin32, and pyinstaller. To install these modules, run these commands in CMD:
 
-pip install cryptography
+`pip install cryptography`
+`pip install pywin32`
+`pip install pyinstaller`
 
-pip install pywin32
+2.From the directory where project files are located (don't forget the locked.ico file), launch this command in CMD:
 
-pip install pyinstaller
+`pyinstaller --name=PasswordManager --noconsole --onefile --icon=locked.ico Login.py`
 
-2. From directory where projects files are located (don't forget locked.ico file) in CMD launch this line of code:
 
-pyinstaller --name=PasswordManager --noconsole --onefile --icon=locked.ico Login.py
+3.After the file conversion is done, you will be able to find the PasswordManager.exe file in the /dist folder.
 
-3. After file conversion is done you'll be able to find PasswordManager.exe file in folder /dist.
+# Explanation
 
 <img src="login.png">
+<img src="password_change.png">
+<img src="password_manager.png">
