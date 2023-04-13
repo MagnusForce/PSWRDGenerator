@@ -8,7 +8,7 @@ This program could be used as it is (just runing Python script). But making .exe
 
 Steps for making launchable .exe file:
 
-  1.Most modules used in this project are pre-installed with Python. Only modules you need to instal are: cryptography, pywin32 and pyinstaller. To do install these modules you should run these lines in CMD:
+1.Most modules used in this project are pre-installed with Python. Only modules you need to instal are: cryptography, pywin32 and pyinstaller. To do install these modules you should run these lines in CMD:
 
 pip install cryptography
 
